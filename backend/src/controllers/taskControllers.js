@@ -14,6 +14,7 @@ const createTask = (req, res) => {
 const updateTask = (req, res) => {
   // Logic to update a task would go here
   res.status(200).json({ message: "Task updated" });
+  
 };
 
 const deleteTask = (req, res) => {
