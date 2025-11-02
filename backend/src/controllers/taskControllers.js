@@ -2,7 +2,7 @@ import Task from "../models/Task.js";
 
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find().sort({ createdAt: -1 });
     res.status(200).json(tasks);
   } catch (error) {
     console.error("Error retrieving getAllTasks:", error);
@@ -22,15 +22,50 @@ const createTask = async (req, res) => {
   }
 };
 
-const updateTask = (req, res) => {
-  // Logic to update a task would go here
-  res.status(200).json({ message: "Task updated" });
-  
+const updateTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, status } = req.body;
+    console.log("Update Task ID:", id);
+    console.log("Update Task Request Body:", req.body);
+
+    const updatedFields = { title };
+    if (status === "completed") {
+      updatedFields.status = "completed";
+      updatedFields.completedAt = new Date();
+    } else if (status === "active") {
+      updatedFields.status = "active";
+      updatedFields.completedAt = null;
+    }
+    console.log("Updated Fields:", updatedFields);
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { $set: updatedFields },
+      { new: true }
+    );
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({ message: "Error updating task" });
+  }
 };
 
-const deleteTask = (req, res) => {
-  // Logic to delete a task would go here
-  res.status(200).json({ message: "Task deleted" });
+const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("Delete Task ID:", id);
+    const deleteTask = await Task.findByIdAndDelete(id);
+    if (!deleteTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).json({ message: "Error deleting task" });
+  }
 };
 
 export { getAllTasks, createTask, updateTask, deleteTask };
