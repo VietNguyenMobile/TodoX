@@ -1,10 +1,10 @@
 import React from "react";
-import { Card } from "./components/ui/card";
+import { Card } from "./ui/card.jsx";
 import { Circle } from "lucide-react";
 
 const TaskEmptyState = ({ filter }) => {
   return (
-    <Card className="p-8 text-center border-0 bg-gradient-card shadow-custom-md">
+    <Card className="p-8 text-center border-0 bg-gradient-card shadow-custom-md opacity-75">
       <div className="space-y-3">
         <Circle className="mx-auto size-12 text-muted-foreground" />
         <div>

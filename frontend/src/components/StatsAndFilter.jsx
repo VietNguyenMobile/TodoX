@@ -1,8 +1,8 @@
 import React from "react";
-import { FilterTypes } from "./lib/data.js";
-import { Badge } from "./components/ui/badge.jsx";
-import { Button } from "./components/ui/button.jsx";
-import { Filter } from "lucide-react";
+import { FilterTypes } from "../lib/data.js";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Filter, SquarePen } from "lucide-react";
 
 const StatsAndFilter = ({
   completedTasksCount = 0,
@@ -35,7 +35,7 @@ const StatsAndFilter = ({
               key={type}
               variant={filter === FilterTypes[type] ? "gradient" : "ghost"}
               size="sm"
-              className="capitalize"
+              className="capitalize opacity-75"
             >
               <Filter className="size-4" />
               {FilterTypes[type]}

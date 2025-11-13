@@ -1,11 +1,11 @@
 // rafce
-import AddTask from "@components/AddTask.jsx";
-import DateTimeFilter from "@components/DateTimeFilter.jsx";
-import Footer from "@components/Footer.jsx";
-import Header from "@components/Header.jsx";
-import StatsAndFilter from "@components/StatsAndFilter.jsx";
-import TaskList from "@components/TaskList.jsx";
-import TaskListPagination from "@components/TaskListPagination.jsx";
+import AddTask from "@/components/AddTask";
+import DateTimeFilter from "@/components/DateTimeFilter";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import StatsAndFilter from "@/components/StatsAndFilter";
+import TaskList from "@/components/TaskList";
+import TaskListPagination from "@/components/TaskListPagination";
 
 import React from "react";
 
@@ -24,7 +24,7 @@ const HomePage = () => {
       {/* Your Content/Components */}
 
       <div className="container pt-8 mx-auto">
-        <div className="w-full max-w-2xl mx-auto space-y-6">
+        <div className="w-full max-w-2xl p-6 mx-auto space-y-6">
           <Header />
           <AddTask />
           <StatsAndFilter />

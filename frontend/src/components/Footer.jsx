@@ -1,9 +1,34 @@
-import React from 'react'
+import React from "react";
 
-const Footer = () => {
+const Footer = ({ completedTasksCount = 0, activeTasksCount = 0 }) => {
   return (
-    <div>Footer</div>
-  )
-}
+    <>
+      {completedTasksCount + activeTasksCount > 0 && (
+        <div className="text-center">
+          © 2024 TodoX. All rights reserved.
+          <p className="text-sm text-muted-foreground mt-1">
+            {completedTasksCount > 0 && (
+              <>
+                Great! You have completed {completedTasksCount} task
+                {completedTasksCount > 1 ? "s" : ""}
+                {activeTasksCount > 0 &&
+                  `, remaining ${activeTasksCount} active task${
+                    activeTasksCount > 1 ? "s" : ""
+                  }. Keep going!`}
+              </>
+            )}
 
-export default Footer
+            {completedTasksCount === 0 && activeTasksCount > 0 && (
+              <>
+                You have {activeTasksCount} active task
+                {activeTasksCount > 1 ? "s" : ""}. Keep going!
+              </>
+            )}
+          </p>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Footer;

@@ -6,20 +6,20 @@ const TaskList = () => {
   const filter = "all";
   const filteredTasks = [
     // Assume this gets populated based on the filter
-    // {
-    //   id: "1",
-    //   title: "Sample Task",
-    //   status: "active",
-    //   completedAt: null,
-    //   createdAt: new Date(),
-    // },
-    // {
-    //   id: "2",
-    //   title: "Completed Task",
-    //   status: "completed",
-    //   completedAt: new Date(),
-    //   createdAt: new Date(),
-    // },
+    {
+      id: "1",
+      title: "Sample Task",
+      status: "active",
+      completedAt: null,
+      createdAt: new Date(),
+    },
+    {
+      id: "2",
+      title: "Completed Task",
+      status: "completed",
+      completedAt: new Date(),
+      createdAt: new Date(),
+    },
   ];
 
   if (!filteredTasks || filteredTasks.length === 0) {

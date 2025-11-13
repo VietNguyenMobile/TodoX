@@ -1,12 +1,12 @@
 import React from "react";
-import { Card } from "./components/ui/card";
-import { Input } from "./components/ui/input";
-import { Button } from "./components/ui/button";
+import { Card } from "./ui/card";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
 
 const AddTask = () => {
   return (
-    <Card className="p-6 border-0 bg-gradient-card shadow-custom-lg">
+    <Card className="p-6 border-0 bg-gradient-card shadow-custom-lg opacity-75">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <Input
           type="text"
