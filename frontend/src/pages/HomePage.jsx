@@ -13,6 +13,9 @@ import { toast } from "sonner";
 
 const HomePage = () => {
   const [taskBuffer, setTaskBuffer] = useState([]);
+  const [activeTaskCount, setActiveTaskCount] = useState(0);
+  const [completedTaskCount, setCompletedTaskCount] = useState(0);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     fetchTasks();
@@ -26,12 +29,25 @@ const HomePage = () => {
       // setTaskBuffer(data);
       const response = await axios.get("http://localhost:5001/api/tasks");
       console.log("Fetched tasks:", response.data);
-      setTaskBuffer(response.data);
+      setTaskBuffer(response.data.allTasks);
+      setActiveTaskCount(response.data.activeCount);
+      setCompletedTaskCount(response.data.completedCount);
     } catch (error) {
       console.error("Error fetching tasks:", error);
       toast.error("Failed to fetch tasks. Please try again.");
     }
   };
+
+  const filterTasks = taskBuffer.filter((task) => {
+    switch (filter) {
+      case "active":
+        return task.status === "active";
+      case "completed":
+        return task.status === "completed";
+      default:
+        return true;
+    }
+  });
 
   return (
     <div className="min-h-screen w-full bg-[#fefcff] relative">
@@ -50,13 +66,21 @@ const HomePage = () => {
         <div className="w-full max-w-2xl p-6 mx-auto space-y-6">
           <Header />
           <AddTask />
-          <StatsAndFilter />
-          <TaskList filteredTasks={taskBuffer} />
+          <StatsAndFilter
+            filter={filter}
+            setFilter={setFilter}
+            activeTasksCount={activeTaskCount}
+            completedTasksCount={completedTaskCount}
+          />
+          <TaskList filter={filter} filteredTasks={filterTasks} />
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <TaskListPagination />
             <DateTimeFilter />
           </div>
-          <Footer />
+          <Footer
+            activeTasksCount={activeTaskCount}
+            completedTasksCount={completedTaskCount}
+          />
         </div>
       </div>
     </div>

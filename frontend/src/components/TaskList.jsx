@@ -2,10 +2,10 @@ import React from "react";
 import TaskEmptyState from "./TaskEmptyState";
 import TaskCard from "./TaskCard";
 
-const TaskList = ({ filteredTasks }) => {
+const TaskList = ({ filteredTasks, filter }) => {
   // console.log("TaskList received tasks:", filteredTasks);
 
-  const filter = "all";
+  // const filter = "all";
   // const filteredTasks = [
   //   // Assume this gets populated based on the filter
   //   {
@@ -28,7 +28,7 @@ const TaskList = ({ filteredTasks }) => {
     return <TaskEmptyState filter={filter} />;
   }
   return (
-    <div className="space-y-3 border-2">
+    <div className="space-y-3">
       {filteredTasks.map((task, index) => (
         <TaskCard key={task._id} task={task} index={index} />
       ))}

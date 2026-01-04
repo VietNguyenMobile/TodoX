@@ -2,8 +2,34 @@ import Task from "../models/Task.js";
 
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 });
-    res.status(200).json(tasks);
+    // const tasks = await Task.find().sort({ createdAt: -1 });
+    // const activeCount = await Task.countDocuments({ status: "active" });
+    // const completedCount = await Task.countDocuments({ status: "completed" });
+    // should run 3 queries only 1 time.
+    // console.log("Active Tasks Count:", activeCount);
+    // console.log("Completed Tasks Count:", completedCount);
+    const result = await Task.aggregate([
+      {
+        $facet: {
+          allTasks: [{ $sort: { createdAt: -1 } }],
+          activeCount: [{ $match: { status: "active" } }, { $count: "count" }],
+          completedCount: [
+            { $match: { status: "completed" } },
+            { $count: "count" },
+          ],
+        },
+      },
+    ]);
+    // res.status(200).json(tasks);
+    const allTasks = result[0].allTasks;
+    const activeCount =
+      result[0].activeCount.length > 0 ? result[0].activeCount[0].count : 0;
+    const completedCount =
+      result[0].completedCount.length > 0
+        ? result[0].completedCount[0].count
+        : 0;
+
+    res.status(200).json({ allTasks, activeCount, completedCount });
   } catch (error) {
     console.error("Error retrieving getAllTasks:", error);
     res.status(500).json({ message: "Error retrieving tasks" });

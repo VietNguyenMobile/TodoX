@@ -8,6 +8,7 @@ const StatsAndFilter = ({
   completedTasksCount = 0,
   activeTasksCount = 0,
   filter = "all",
+  setFilter,
 }) => {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
@@ -36,6 +37,7 @@ const StatsAndFilter = ({
               variant={filter === FilterTypes[type] ? "gradient" : "ghost"}
               size="sm"
               className="capitalize opacity-75"
+              onClick={() => setFilter(FilterTypes[type])}
             >
               <Filter className="size-4" />
               {FilterTypes[type]}
