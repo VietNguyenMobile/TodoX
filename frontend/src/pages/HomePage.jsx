@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import StatsAndFilter from "@/components/StatsAndFilter";
 import TaskList from "@/components/TaskList";
 import TaskListPagination from "@/components/TaskListPagination";
-import axios from "axios";
+import api from "@/lib/axios";
 
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -27,7 +27,7 @@ const HomePage = () => {
       // const data = await response.json();
       // console.log("Fetched tasks:", data);
       // setTaskBuffer(data);
-      const response = await axios.get("http://localhost:5001/api/tasks");
+      const response = await api.get("/tasks");
       console.log("Fetched tasks:", response.data);
       setTaskBuffer(response.data.allTasks);
       setActiveTaskCount(response.data.activeCount);
@@ -49,6 +49,10 @@ const HomePage = () => {
     }
   });
 
+  const handleTaskChanged = () => {
+    fetchTasks();
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#fefcff] relative">
       {/* Dreamy Sky Pink Glow */}
@@ -65,7 +69,7 @@ const HomePage = () => {
       <div className="container pt-8 mx-auto">
         <div className="w-full max-w-2xl p-6 mx-auto space-y-6">
           <Header />
-          <AddTask />
+          <AddTask handleNewTaskAdded={handleTaskChanged} />
           <StatsAndFilter
             filter={filter}
             setFilter={setFilter}
