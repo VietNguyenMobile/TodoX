@@ -6,10 +6,33 @@ import Header from "@/components/Header";
 import StatsAndFilter from "@/components/StatsAndFilter";
 import TaskList from "@/components/TaskList";
 import TaskListPagination from "@/components/TaskListPagination";
+import axios from "axios";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 const HomePage = () => {
+  const [taskBuffer, setTaskBuffer] = useState([]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      // const response = await fetch("http://localhost:5001/api/tasks");
+      // const data = await response.json();
+      // console.log("Fetched tasks:", data);
+      // setTaskBuffer(data);
+      const response = await axios.get("http://localhost:5001/api/tasks");
+      console.log("Fetched tasks:", response.data);
+      setTaskBuffer(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      toast.error("Failed to fetch tasks. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#fefcff] relative">
       {/* Dreamy Sky Pink Glow */}
@@ -28,7 +51,7 @@ const HomePage = () => {
           <Header />
           <AddTask />
           <StatsAndFilter />
-          <TaskList />
+          <TaskList filteredTasks={taskBuffer} />
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <TaskListPagination />
             <DateTimeFilter />
