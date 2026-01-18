@@ -2,7 +2,7 @@ import React from "react";
 import TaskEmptyState from "./TaskEmptyState";
 import TaskCard from "./TaskCard";
 
-const TaskList = ({ filteredTasks, filter }) => {
+const TaskList = ({ filteredTasks, filter, handleTaskChanged }) => {
   // console.log("TaskList received tasks:", filteredTasks);
 
   // const filter = "all";
@@ -30,7 +30,12 @@ const TaskList = ({ filteredTasks, filter }) => {
   return (
     <div className="space-y-3">
       {filteredTasks.map((task, index) => (
-        <TaskCard key={task._id} task={task} index={index} />
+        <TaskCard
+          key={task._id}
+          task={task}
+          index={index}
+          handleTaskChanged={handleTaskChanged}
+        />
       ))}
     </div>
   );

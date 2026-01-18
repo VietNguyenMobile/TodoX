@@ -76,7 +76,11 @@ const HomePage = () => {
             activeTasksCount={activeTaskCount}
             completedTasksCount={completedTaskCount}
           />
-          <TaskList filter={filter} filteredTasks={filterTasks} />
+          <TaskList
+            filter={filter}
+            filteredTasks={filterTasks}
+            handleTaskChanged={handleTaskChanged}
+          />
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <TaskListPagination />
             <DateTimeFilter />
