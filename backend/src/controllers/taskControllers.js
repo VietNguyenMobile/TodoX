@@ -8,7 +8,32 @@ const getAllTasks = async (req, res) => {
     // should run 3 queries only 1 time.
     // console.log("Active Tasks Count:", activeCount);
     // console.log("Completed Tasks Count:", completedCount);
+
+    const { filter = "today" } = req.query;
+    const now = new Date();
+    let startDate;
+
+    switch (filter) {
+      case "today":
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 2026-01-20 00:00
+        break;
+      case "week":
+        const mondayDate =
+          now.getDate() - (now.getDay() - 1) - (now.getDay() === 0 ? 7 : 0); // Adjust to get Monday
+        startDate = new Date(now.getFullYear(), now.getMonth(), mondayDate); // Start of the week (Monday)
+        break;
+      case "month":
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1); // First day of the month
+        break;
+      case "all":
+      default:
+        startDate = null;
+    }
+
+    const query = startDate ? { createdAt: { $gte: startDate } } : {};
+
     const result = await Task.aggregate([
+      { $match: query },
       {
         $facet: {
           allTasks: [{ $sort: { createdAt: -1 } }],

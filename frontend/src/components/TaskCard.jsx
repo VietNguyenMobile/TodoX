@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
@@ -14,7 +14,8 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 
 const TaskCard = ({ task, index, handleTaskChanged }) => {
-  let isEditing = false;
+  const [isEditing, setIsEditing] = useState(false);
+  const [updateTaskTitle, setUpdateTaskTitle] = useState(task.title || "");
 
   const deleteTask = async (taskId) => {
     console.log("Deleting task with ID:", taskId);
@@ -28,6 +29,55 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
       console.error("Error deleting task:", error);
       // Handle error (e.g., show a notification)
       toast.error("Failed to delete task. Please try again.");
+    }
+  };
+
+  const updateTask = async () => {
+    if (!updateTaskTitle.trim()) {
+      toast.error("Task title cannot be empty.");
+      return;
+    }
+
+    try {
+      const response = await api.put(`/tasks/${task._id}`, {
+        title: updateTaskTitle,
+      });
+      console.log("Task updated:", response.data);
+      toast.success(`Task updated to "${response.data.title}" successfully!`);
+
+      // Optionally, refresh the task list or notify the parent component
+      handleTaskChanged();
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating task:", error);
+      // Handle error (e.g., show a notification)
+      toast.error("Failed to update task. Please try again.");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      updateTask();
+    }
+  };
+
+  const toggleTaskStatus = async () => {
+    try {
+      const newStatus = task.status === "completed" ? "active" : "completed";
+      const response = await api.put(`/tasks/${task._id}`, {
+        status: newStatus,
+        completedAt:
+          newStatus === "completed" ? new Date().toISOString() : null,
+      });
+      console.log("Task status toggled:", response.data);
+      toast.success(`Task marked as "${response.data.status}" successfully!`);
+
+      // Optionally, refresh the task list or notify the parent component
+      handleTaskChanged();
+    } catch (error) {
+      console.error("Error toggling task status:", error);
+      // Handle error (e.g., show a notification)
+      toast.error("Failed to toggle task status. Please try again.");
     }
   };
 
@@ -49,6 +99,7 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
               ? "text-success hover:text-success/80"
               : "text-muted-foreground hover:text-primary"
           )}
+          onClick={toggleTaskStatus}
         >
           {task.status === "completed" ? (
             <CheckCircle2 className="size-5" />
@@ -62,6 +113,13 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
               placeholder="Edit task..."
               className="flex-1 h-12 text-base border-border/50 focus:border-primary/50 focus:ring-primary/20"
               type="text"
+              value={updateTaskTitle}
+              onChange={(e) => setUpdateTaskTitle(e.target.value)}
+              onKeyPress={handleKeyPress}
+              onBlur={() => {
+                setIsEditing(false);
+                setUpdateTaskTitle(task.title || "");
+              }}
             />
           ) : (
             <p
@@ -114,6 +172,10 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
             variant="ghost"
             size="icon"
             className="flex-shrink-0 transition-colors size-8 text-muted-foreground hover:text-info"
+            onClick={() => {
+              setIsEditing(true);
+              setUpdateTaskTitle(task.title || "");
+            }}
           >
             <SquarePen className="size-4" />
           </Button>
